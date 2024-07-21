@@ -18,6 +18,8 @@ convert_file() {
 	echo "-- END   '$name' ---------------------------------------"
 }
 
+mkdir dist
+
 echo "$PREAMBLE" >./dist/native-functions.lua
 
 for f in ./pkgs/native-functions/*.lua; do
