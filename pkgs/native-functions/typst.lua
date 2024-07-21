@@ -1,3 +1,5 @@
+local pandoc = require("pandoc")
+
 local function format_namedargs(namedargs)
     if #namedargs == 0 then
         return ""
@@ -12,7 +14,7 @@ local function format_namedargs(namedargs)
     return fnamedargs
 end
 
-function escape_text(text)
+local function escape_text(text)
     local etext = string.gsub(text, "\\", "\\\\")
     etext = string.gsub(etext, '"', '\\"')
 
@@ -27,12 +29,12 @@ typst.Command = function(cmdname, posarg, namedargs)
 end
 
 typst.RawCommand = function(cmdname, posarg, namedargs)
-    local posarg = escape_text(posarg)
+    local eposarg = escape_text(posarg)
     local fnamedargs = format_namedargs(namedargs)
     if #namedargs > 0 then
         fnamedargs = ", " .. fnamedargs
     end
-    return pandoc.RawInline("typst", "#" .. cmdname .. "(" .. posarg .. fnamedargs .. ")")
+    return pandoc.RawInline("typst", "#" .. cmdname .. "(" .. eposarg .. fnamedargs .. ")")
 end
 
 return typst

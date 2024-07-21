@@ -1,3 +1,5 @@
+local pandoc = require("pandoc")
+
 local function format_namedargs(namedargs)
     if #namedargs == 0 then
         return ""
@@ -15,15 +17,15 @@ end
 local latex = {}
 
 latex.Command = function(cmdname, posarg, namedargs)
-    local namedargs = format_namedargs(namedargs)
-    return pandoc.RawInline("latex", "\\" .. cmdname .. namedargs .. "{" .. posarg .. "}")
+    local fnamedargs = format_namedargs(namedargs)
+    return pandoc.RawInline("latex", "\\" .. cmdname .. fnamedargs .. "{" .. posarg .. "}")
 end
 
 latex.Environment = function(cmdname, posarg, namedargs)
-    local namedargs = format_namedargs(namedargs)
+    local fnamedargs = format_namedargs(namedargs)
     return pandoc.RawInline(
         "latex",
-        "\\begin{" .. cmdname .. "}" .. namedargs .. "\n" .. posarg .. "\n\\end{" .. cmdname .. "}"
+        "\\begin{" .. cmdname .. "}" .. fnamedargs .. "\n" .. posarg .. "\n\\end{" .. cmdname .. "}"
     )
 end
 

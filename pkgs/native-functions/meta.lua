@@ -1,10 +1,12 @@
+local pandoc = require("pandoc")
+
 local native_functions = {}
 
 local meta = {}
 
-meta.parse = function(meta)
-    if meta["native_functions"] then
-        for k, v in ipairs(meta["native_functions"]) do
+meta.parse = function(m)
+    if m["native_functions"] then
+        for _, v in ipairs(m["native_functions"]) do
             if pandoc.utils.type(v) ~= "Inlines" then
                 error("native_functions must be a list of strings")
             end
@@ -23,7 +25,7 @@ meta.parse = function(meta)
 end
 
 meta.is_native_function = function(el)
-    found = {}
+    local found = {}
     for _, v in ipairs(el.classes) do
         if native_functions[v] then
             found[#found + 1] = v
@@ -36,7 +38,7 @@ meta.is_native_function = function(el)
         return true
     else
         found = table.concat(found, ", ")
-        text = pandoc.json.encode(el)
+        local text = pandoc.json.encode(el)
         error("multiple native functions found for " .. text .. ": " .. found)
     end
 end
